@@ -5,10 +5,52 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Etch-A-Sketch</title>
-    <link rel="stylesheet" href="css/style/css">
+    <link rel="stylesheet" href="css/style.css">
     <script src="js/script.js" defer></script>
 </head>
 <body>
-    Hello World!
+    <header>
+        <p>The Odin Project Curriculum</p>
+        <p>Etch A Sketch Project</p>
+    </header>
+    <main>
+        <div class="container">
+            <div class="main__header">
+                <div class="header__clear">
+                    <input type="range" step="1">
+                </div>
+                <div class="help__button">
+                    <button>?</button>
+                </div>
+            </div>
+
+            <div class="main__middle">
+                <div class="middle__left">
+                    <button>black</button>
+                    <button>color</button>
+                </div>
+                <div class="middle__display"></div>
+                <div class="middle__right">
+                    <div class="size__slider">
+                        <input type="range" step="1" orient="vertical">
+                    </div>
+                    <div class="right__buttons">
+                        <div class="size__info"></div>
+                        <button>hover</button>
+                        <button>wheels</button>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="main__bottom">
+                <div class="left__wheel wheel"></div>
+                <div class="bottom__title">Etch A Sketch</div>
+                <div class="light__wheel wheel"></div>
+            </div>
+        </div>
+    </main>
+    
+
+    <footer>Designed by Barister &#169; 2023<a href="https://github.com/Barister/etch-a-sketch"><img class="github__logo" src="img/github-mark.svg" alt=""></a></footer>
 </body>
 </html>
