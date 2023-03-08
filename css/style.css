@@ -1,8 +1,14 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Aladin&family=Exo+2:wght@300;400;600;700&family=Work+Sans:wght@400;600;700&display=swap');
+
+
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;   
 }
+
 
 html {
     height: 100%;
@@ -23,7 +29,7 @@ body {
     margin: 0 auto;
     padding: 20px;
     border: 2px solid #fff;
-    border-radius: 10px;
+    border-radius: 20px;
     
 }
 
@@ -144,6 +150,10 @@ main button {
     justify-content: center;
     display: flex;
     align-items: center;
+    font-family: 'Aladin', cursive;
+    color: #fff;
+    font-size: 40px;
+    letter-spacing: 5px;
 }
 .light__wheel {
 }
