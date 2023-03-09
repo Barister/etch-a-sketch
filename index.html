@@ -21,7 +21,7 @@
         <div class="container">
             <div class="main__header">
                 <div class="header__clear">
-                    <input type="range" step="1">
+                    <input type="range" step="1" value="0" min="0" max="100">
                 </div>
                 <div class="help__button">
                     <button>?</button>
@@ -35,24 +35,22 @@
                 <div class="middle__display"></div>
                 <div class="middle__right">
                     <div class="size__slider">
-                        <input type="range" step="1" orient="vertical">
+                        <input type="range" step="1" orient="vertical" value="0" min="0" max="100">
                     </div>
-                    <!-- <div class="right__buttons">
-                        <div class="size__info"></div>
-                        
-                        
-                    </div> -->
+                    <div class="size__info">
+                        <span class="resolution__width">16</span><span> x </span><span class="resolution__height">9</span>
+                    </div>
                 </div>
             </div>
             <div class="main__bottom">
                 <div class="left__wheel wheel"></div>
                 <div class="bottom__left">
-                    <button>black</button>
+                    <button class="active">black</button>
                     <button>color</button>
                 </div>
                 <div class="bottom__title">Etch A Sketch</div>
                 <div class="bottom__right">
-                    <button>hover</button>
+                    <button class="active">hover</button>
                     <button>wheels</button>
                 </div>
                 <div class="right__wheel wheel"></div>
