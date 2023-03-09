@@ -65,6 +65,23 @@ main button {
     width: 740px;
     margin-top: 10px;
     margin-left: 80px;
+    -webkit-appearance: none;
+    border: 3px solid #fff;
+    height: 17px;
+    outline: none;
+    border-radius: 5px;
+    background: #a52a2a;
+}
+
+.clear__slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 40px;
+    background: #a52a2a;
+    cursor: pointer;
+    border: 3px solid #fff;
+    border-radius: 5px;
 }
 
 .help__button {
@@ -105,24 +122,43 @@ main button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    transform: rotate(-90deg);
+    position: relative;
 }
 
 .size__slider {
     display: flex;
     align-items: center;
-   /* margin-right: 10px; */
+    margin-right: -40px; 
     
 }
 
 
 .size__slider input {
-    -webkit-appearance: slider-vertical; /* Chromium */
-    writing-mode: bt-lr; /* IE */
-    height: 300px;
-    width: 8px;
-    padding: 0 5px;
+    /* -webkit-appearance: slider-vertical; /* Chromium */
+    /* writing-mode: bt-lr; /* IE */
+    height: 17px;
+    width: 300px;
+    border: 3px solid #fff;
+    outline: none;
+    border-radius: 5px;
+    background: #a52a2a;
+    -webkit-appearance: none;
+    
 }
+
+.vertical__slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 40px;
+    background: #a52a2a;
+    cursor: pointer;
+    border: 3px solid #fff;
+    border-radius: 5px;
+}
+
+
 .right__buttons {
     display: flex;
     flex-direction: column;
@@ -141,7 +177,10 @@ main button {
     font-family: 'Aladin', cursive;
     color: #fff;
     font-size: 22px;
-    
+    transform: rotate(90deg);
+    position: absolute;
+    margin-right: 340px;
+    display: flex;
 }
 
 
