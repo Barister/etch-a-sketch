@@ -1,8 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Aladin&family=Exo+2:wght@300;400;600;700&family=Work+Sans:wght@400;600;700&display=swap');
 
-
-
 * {
     margin: 0;
     padding: 0;
@@ -22,10 +20,8 @@ body {
     height: 100%;
 }
 
-
-
 .container {
-    
+   
     width: 960px;
     margin: 0 auto;
     padding: 20px;
@@ -57,6 +53,7 @@ main button {
     display: flex;
     justify-content: space-between;
 }
+
 .header__clear {
     margin-bottom: 20px;
 }
@@ -102,12 +99,11 @@ main button {
     
     
 }
+
 .middle__left {
     width: 80px;
     
 }
-
-
 
 .middle__display {
     width: 720px;
