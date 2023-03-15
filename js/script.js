@@ -1,6 +1,6 @@
 // to determine some variables
 
-const display = document.querySelector('.middle__display');
+let display = document.querySelector('.middle__display');
 
 const displayResolutionWidth = display.offsetWidth;
 const displayResolutionHeight = display.offsetHeight;
@@ -18,8 +18,8 @@ function clearGrid() {
 
 // to make a grid for display
 function makeGrid() {
-    let displayWidth = document.querySelector('.resolution__width').innerHTML / 1;
-    let displayHeight = document.querySelector('.resolution__height').innerHTML / 1;
+    let displayWidth = document.querySelector('.resolution__width').innerHTML;
+    let displayHeight = document.querySelector('.resolution__height').innerHTML;
 
     for (let i = 0; i < displayHeight; i++) {
         const displayRow = document.createElement('div');
@@ -59,7 +59,7 @@ function sizeChange() {
     eraseSlider.setAttribute('max', sizeSlider.value);
 
     // to return eraseSlide on the left;
-    if (eraseSlider.value / 1 > 0) {
+    if (eraseSlider.value > 0) {
         eraseSlider.value = 0;
     }
 
@@ -72,46 +72,46 @@ function sizeChange() {
 
 // to make hover effect
 
-
 function makeHover() {
+
     let displayElement = document.querySelectorAll('.display__element');
     let eraseSlider = document.querySelector('.clear__slider');
 
-
-    console.log('eraseSlider.value снаружи:', eraseSlider.value);
-    //console.log('typeof eraseSlider снаружи eventListener:', typeof eraseSlider);
-
     // func outside to have possibility to remove it if slider.value is > 0;
-    function test(element) {
-        this.style.backgroundColor = '#000';
+    // contains condition of choosing color 
+
+    function draw(element) {
+        if (blackButton.classList.contains('active')){
+            this.style.backgroundColor = '#000';
+        }
+        else if (colorButton.classList.contains('active')) {
+            this.style.backgroundColor = 'yellow';
+        }
+        
+        element.preventDefault();
     }
 
-    if (eraseSlider.value == 0) {
-        displayElement.forEach(element => element.addEventListener('mouseenter', test))}
+    function startDrawing(e) {
         
-    
-    eraseSlider.addEventListener('input', (e) => {
-        console.log('eraseSlider.value inside eventListener:', eraseSlider.value);
-        
-        if (eraseSlider.value /1 == 0) {
-            console.log('eraseSlider == 0 это уже после смены инпута')
-            displayElement.forEach(element => element.addEventListener('mouseenter', test));
-        }
-        else if (eraseSlider.value > 0) {
-            console.log('!!!value > 0 после снятия события!!!:', eraseSlider.value);
-            displayElement.forEach(element => element.removeEventListener('mouseenter', test ));
-        
-            
-        }
-        
+            if (eraseSlider.value == 0) {
+                displayElement.forEach(element => element.addEventListener('mousemove', draw))}
+                 
+            e.preventDefault();
+         
+    }
 
-    })
+    display.addEventListener('mousedown', startDrawing);
 
-    
+    display.addEventListener('mouseup', () => {
+        displayElement.forEach(element => element.removeEventListener('mousemove', draw));
+        display.addEventListener('mousedown', startDrawing);
+    });
 
-    
-    
+    display.addEventListener('mouseleave', () => {
+        displayElement.forEach(element => element.removeEventListener('mousemove', draw));
+    });
 }
+
 
 
 // to erase display by eraseSlider

@@ -115,6 +115,7 @@ main button {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    z-index: 100;
 }
 .middle__right {
     width: 80px;
