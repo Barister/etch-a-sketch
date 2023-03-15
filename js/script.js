@@ -41,7 +41,7 @@ function makeGrid() {
 }
 
 makeGrid();
-makeHover()
+makeHover();
 
 // to make slider change of grid
 
@@ -71,20 +71,43 @@ function sizeChange() {
 
 
 // to make hover effect
+
+
 function makeHover() {
     let displayElement = document.querySelectorAll('.display__element');
     let eraseSlider = document.querySelector('.clear__slider');
 
 
+    console.log('eraseSlider.value снаружи:', eraseSlider.value);
+    //console.log('typeof eraseSlider снаружи eventListener:', typeof eraseSlider);
 
-    console.log('eraseSlider.value:', eraseSlider.value);
-    console.log(typeof eraseSlider);
+    // func outside to have possibility to remove it if slider.value is > 0;
+    function test(element) {
+        this.style.backgroundColor = '#000';
+    }
 
     if (eraseSlider.value == 0) {
-        displayElement.forEach(element => element.addEventListener('mousemove', () => {
-            element.style.backgroundColor = '#000';
-        }));
-    }
+        displayElement.forEach(element => element.addEventListener('mouseenter', test))}
+        
+    
+    eraseSlider.addEventListener('input', (e) => {
+        console.log('eraseSlider.value inside eventListener:', eraseSlider.value);
+        
+        if (eraseSlider.value /1 == 0) {
+            console.log('eraseSlider == 0 это уже после смены инпута')
+            displayElement.forEach(element => element.addEventListener('mouseenter', test));
+        }
+        else if (eraseSlider.value > 0) {
+            console.log('!!!value > 0 после снятия события!!!:', eraseSlider.value);
+            displayElement.forEach(element => element.removeEventListener('mouseenter', test ));
+        
+            
+        }
+        
+
+    })
+
+    
 
     
     
@@ -101,7 +124,8 @@ function eraseDisplay() {
     let displayHeight = document.querySelector('.resolution__height').innerHTML / 1;
         
     if (eraseSlider.value > 0) {
-                
+        //console.log('eraseSlider inside eraseDisplay:', eraseSlider);
+        //console.log('eraseSlider.value inside eraseDisplay:', eraseSlider.value);
         for (let i = 0; i < eraseSlider.value; i ++) {
             let j = i;
           
@@ -117,96 +141,45 @@ function eraseDisplay() {
     
 }
 
+// to toggle active buttons
+
+let bottomLeftButtons = document.querySelectorAll('.bottom__left button');
+let bottomRightButtons = document.querySelectorAll('.bottom__right button');
+
+function toggleActive(buttons) {
+    buttons.forEach(e => {
+        
+        e.addEventListener('click', 
+        
+        function(event) {
+            let clickedButton = this;
+            
+            //to take clicked element and compare with buttons array element
+            buttons.forEach(button => {
+                if (clickedButton != button) {
+                    button.classList.remove('active');
+                }
+                else if (clickedButton.classList.contains('active')) {
+                    clickedButton.classList.remove('active')
+                }
+                else {
+                    clickedButton.classList.add('active');
+                }
+            })
+
+            event.preventDefault();
+        })
+    })
+}
+
+
+toggleActive(bottomLeftButtons);
+toggleActive(bottomRightButtons);
+
+
 
 // to make buttons about color
 
 let blackButton = document.querySelector('.black__button');
 let colorButton = document.querySelector('.color__button');
-
-let bottomLeftButtons = document.querySelectorAll('.bottom__left button');
-let bottomRightButtons = document.querySelectorAll('.bottom__right button');
-
-
-// to toggle active buttons
-
-function toggleActive(buttons) {
-    buttons.forEach(e => {
-        console.log('this до функции:', this);
-
-        e.addEventListener('click', 
-        
-        function(element) {
-            let current = this;
-
-            //способ через ForEach к осознанию, переписанный мной
-            buttons.forEach(test => {
-                if (current != test) {
-                    test.classList.remove('active');
-                }
-                else if (current.classList.contains('active')) {
-                    current.classList.remove('active')
-                }
-                else {
-                    current.classList.add('active');
-                }
-            })
-
-            // способ копи-паста через цикл к осознанию
-            //})
-            // let current = this;
-            // console.log('this внутри функции:', current);
-            // for (let i = 0; i < buttons.length; i++) {
-            //     console.log('buttons[i]:', buttons[i], '||', 'element:', element);
-            //     if (current != buttons[i]) {
-            //         buttons[i].classList.remove('active');
-            //     }
-            //     else if (current.classList.contains('active')) {
-            //         current.classList.remove('active')
-            //     }
-            //     else {
-            //         current.classList.add('active');
-            //     }
-            // }
-            element.preventDefault();
-        })
-    })
-}
-
-
-
-function toggleActiveForeach (buttons) {
-    buttons.forEach(e => {
-        console.log('this до функции:', this);
-
-        e.addEventListener('click', () => {
-            console.log('this внутри toggleActiveForeach:', this);
-        })
-    })
-}
-
-toggleActiveForeach (bottomLeftButtons)
-    
-    // element => {
-        
-    //     console.log('e:', e);
-    //     console.log('element:', element);
-    //     console.log('class кнопки:', e.getAttribute('class'));
-
-    //     //if (e != element) {e.classList.remove('active');}
-    //     if (e.getAttribute('class').includes('active')) {
-    //         e.classList.remove('active');
-    //     }
-    //     else {
-    //         e.classList.add('active');
-    //     }
-    //     })
-    
-
-//});
-//}
-
-// toggleActive(bottomLeftButtons);
-toggleActive(bottomRightButtons);
-
-
 
