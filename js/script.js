@@ -41,7 +41,8 @@ function makeGrid() {
 }
 
 makeGrid();
-makeHover();
+
+//makeHover();
 
 // to make slider change of grid
 
@@ -65,7 +66,7 @@ function sizeChange() {
 
     clearGrid();
     makeGrid();
-    makeHover()
+    listenHoverButton();
 }
 
 
@@ -81,11 +82,14 @@ function makeHover() {
     // contains condition of choosing color 
 
     function draw(element) {
-        if (blackButton.classList.contains('active')){
-            this.style.backgroundColor = '#000';
-        }
-        else if (colorButton.classList.contains('active')) {
-            this.style.backgroundColor = 'yellow';
+        if (hoverButton.classList.contains('active')) {
+
+            if (blackButton.classList.contains('active')){
+                this.style.backgroundColor = '#000';
+            }
+            else if (colorButton.classList.contains('active')) {
+                this.style.backgroundColor = 'yellow';
+            }
         }
         
         element.preventDefault();
@@ -182,4 +186,50 @@ toggleActive(bottomRightButtons);
 
 let blackButton = document.querySelector('.black__button');
 let colorButton = document.querySelector('.color__button');
+
+
+// to make wheels rotation
+
+let hoverButton = document.querySelector('.hover__button');
+let wheelsButton = document.querySelector('.wheels__button');
+
+//console.log(hoverButton.classList.contains('active'));
+//console.log(wheelsButton.classList.contains('active'));
+
+function listenHoverButton() {
+    if (hoverButton.classList.contains('active')) {
+        console.log('Houston, we have a hover button pressed in download!');
+            makeHover();
+    }
+
+    hoverButton.addEventListener('click', () => {
+        //console.log('e:', this);
+        if (hoverButton.classList.contains('active')) {
+            console.log('Houston, we have a hover button pressed inside EventListener!');
+            makeHover();
+        }
+    })
+}
+
+function listenWheelsButton() {
+    wheelsButton.addEventListener('click', () => {
+        if (wheelsButton.classList.contains('active')) {
+            console.log('Houston, we have a wheels button pressed!');
+            makeWheels();
+            ;
+        }
+    })
+}
+
+
+function makeWheels() {
+    console.log('makeWheels great again!');
+}
+
+
+listenHoverButton();
+listenWheelsButton();
+
+//console.log('listenHoverButton():', listenHoverButton());
+//console.log('listenWheelsButton():', listenWheelsButton());
 
