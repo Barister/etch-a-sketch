@@ -98,21 +98,21 @@ function makeHover() {
     function startDrawing(e) {
         
             if (eraseSlider.value == 0) {
-                displayElement.forEach(element => element.addEventListener('mousemove', draw))}
+                displayElement.forEach(element => element.addEventListener('pointermove', draw))}
                  
             e.preventDefault();
          
     }
 
-    display.addEventListener('mousedown', startDrawing);
+    display.addEventListener('pointerdown', startDrawing);
 
-    display.addEventListener('mouseup', () => {
-        displayElement.forEach(element => element.removeEventListener('mousemove', draw));
-        display.addEventListener('mousedown', startDrawing);
+    display.addEventListener('pointerup', () => {
+        displayElement.forEach(element => element.removeEventListener('pointermove', draw));
+        display.addEventListener('pointerdown', startDrawing);
     });
 
-    display.addEventListener('mouseleave', () => {
-        displayElement.forEach(element => element.removeEventListener('mousemove', draw));
+    display.addEventListener('pointerleave', () => {
+        displayElement.forEach(element => element.removeEventListener('pointermove', draw));
     });
 }
 
