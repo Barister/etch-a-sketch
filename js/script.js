@@ -5,9 +5,21 @@ let display = document.querySelector('.middle__display');
 const displayResolutionWidth = display.offsetWidth;
 const displayResolutionHeight = display.offsetHeight;
 
+// test for rightclick 
+let displayButton = display.addEventListener('pointerdown', event => event.button);
 
+
+
+
+    
+console.log('displayButton:', displayButton);
+
+// to disable for open context menu by right click in display
+display.addEventListener('contextmenu', event => event.preventDefault());
 
 // to clear displayGrid
+
+console.log('displayButton:', displayButton);
 
 function clearGrid() {
     document.querySelectorAll('.display__row')
@@ -82,6 +94,9 @@ function makeHover() {
     // contains condition of choosing color 
 
     function draw(element) {
+
+          
+
         if (hoverButton.classList.contains('active')) {
 
             if (blackButton.classList.contains('active')){
@@ -94,16 +109,27 @@ function makeHover() {
                 
                 this.style.backgroundColor = `rgb(${randomRed},${randomGreen},${randomBlue})`;
             }
+            
         }
         
         element.preventDefault();
     }
 
+    function erase(element) {
+        if (hoverButton.classList.contains('active')) {
+                this.style.backgroundColor = ``;
+            
+            
+        }
+    }
+
     function startDrawing(e) {
-        
-            if (eraseSlider.value == 0) {
+        console.log('element:', e.button);
+            if (eraseSlider.value == 0 && e.button == 0) {
                 displayElement.forEach(element => element.addEventListener('pointermove', draw))}
-                 
+            else if(eraseSlider.value == 0 && e.button == 2) {
+                displayElement.forEach(element => element.addEventListener('pointerdown', erase))
+            }    
             e.preventDefault();
          
     }
