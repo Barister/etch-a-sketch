@@ -88,7 +88,11 @@ function makeHover() {
                 this.style.backgroundColor = '#000';
             }
             else if (colorButton.classList.contains('active')) {
-                this.style.backgroundColor = 'yellow';
+                let randomRed = Math.floor(Math.random() * 255);
+                let randomGreen = Math.floor(Math.random() * 255);
+                let randomBlue =  Math.floor(Math.random() * 255);
+                
+                this.style.backgroundColor = `rgb(${randomRed},${randomGreen},${randomBlue})`;
             }
         }
         
@@ -128,8 +132,7 @@ function eraseDisplay() {
     let displayHeight = document.querySelector('.resolution__height').innerHTML / 1;
         
     if (eraseSlider.value > 0) {
-        //console.log('eraseSlider inside eraseDisplay:', eraseSlider);
-        //console.log('eraseSlider.value inside eraseDisplay:', eraseSlider.value);
+        
         for (let i = 0; i < eraseSlider.value; i ++) {
             let j = i;
           
@@ -138,8 +141,7 @@ function eraseDisplay() {
                 j += max;
             } while (j < displayWidth * displayHeight);
         }
-        // console.log('Запускаем из eraseDisplay новый makeHover()');
-        // makeHover();
+        
 
     }
     
@@ -193,19 +195,16 @@ let colorButton = document.querySelector('.color__button');
 let hoverButton = document.querySelector('.hover__button');
 let wheelsButton = document.querySelector('.wheels__button');
 
-//console.log(hoverButton.classList.contains('active'));
-//console.log(wheelsButton.classList.contains('active'));
-
 function listenHoverButton() {
     if (hoverButton.classList.contains('active')) {
-        console.log('Houston, we have a hover button pressed in download!');
+        
             makeHover();
     }
 
     hoverButton.addEventListener('click', () => {
-        //console.log('e:', this);
+        
         if (hoverButton.classList.contains('active')) {
-            console.log('Houston, we have a hover button pressed inside EventListener!');
+            
             makeHover();
         }
     })
@@ -230,6 +229,4 @@ function makeWheels() {
 listenHoverButton();
 listenWheelsButton();
 
-//console.log('listenHoverButton():', listenHoverButton());
-//console.log('listenWheelsButton():', listenWheelsButton());
 
