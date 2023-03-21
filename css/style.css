@@ -199,14 +199,78 @@ main button {
     height: 90px;
     background-color: #fff;
     border-radius: 50%;
+    border: 5px dashed #6b6767;
+   
+ 
 }
 
 .wheel:hover {
     box-shadow: inset 0 0 10px rgba(0, 0, 0, .99);
+    
 }
 
-.left__wheel {
-    
+.left__wheel:hover {
+    animation-name: rotateRight;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes rotateRight {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.right__wheel:hover {
+    animation-name: rotateLeft;
+    animation-duration: 5s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+
+@keyframes rotateLeft {
+    from {
+        transform: rotate(360deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+.rotateRight15deg {
+    animation-name: rotateRight15deg;
+    animation-duration: 0.5s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+
+.rotateLeft15deg {
+    animation-name: rotateLeft15deg;
+    animation-duration: 0.5s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+
+@keyframes rotateLeft15deg {
+    from {
+        transform: rotate(360deg);
+    }
+    to {
+        transform: rotate(345deg);
+    }
+}
+
+@keyframes rotateRight15deg {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(15deg);
+    }
 }
 
 .bottom__left {
@@ -401,6 +465,7 @@ button:target {
     height: 80px;
     background-color: #fff;
     border-radius: 50%;
+    
 }
 
 .bottom__title {

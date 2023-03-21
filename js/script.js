@@ -12,14 +12,14 @@ let displayButton = display.addEventListener('pointerdown', event => event.butto
 
 
     
-console.log('displayButton:', displayButton);
+//console.log('displayButton:', displayButton);
 
 // to disable for open context menu by right click in display
 display.addEventListener('contextmenu', event => event.preventDefault());
 
 // to clear displayGrid
 
-console.log('displayButton:', displayButton);
+//console.log('displayButton:', displayButton);
 
 function clearGrid() {
     document.querySelectorAll('.display__row')
@@ -124,13 +124,14 @@ function makeHover() {
     }
 
     function startDrawing(e) {
-        console.log('element:', e.button);
+        console.log('element:', e);
+        e.preventDefault();
             if (eraseSlider.value == 0 && e.button == 0) {
                 displayElement.forEach(element => element.addEventListener('pointermove', draw))}
             else if(eraseSlider.value == 0 && e.button == 2) {
                 displayElement.forEach(element => element.addEventListener('pointerdown', erase))
             }    
-            e.preventDefault();
+            
          
     }
 
@@ -223,14 +224,14 @@ let wheelsButton = document.querySelector('.wheels__button');
 
 function listenHoverButton() {
     if (hoverButton.classList.contains('active')) {
-        
+            rotateWheels();
             makeHover();
     }
 
     hoverButton.addEventListener('click', () => {
         
         if (hoverButton.classList.contains('active')) {
-            
+            rotateWheels();
             makeHover();
         }
     })
@@ -239,18 +240,87 @@ function listenHoverButton() {
 function listenWheelsButton() {
     wheelsButton.addEventListener('click', () => {
         if (wheelsButton.classList.contains('active')) {
+            
             console.log('Houston, we have a wheels button pressed!');
-            makeWheels();
-            ;
+                        
         }
     })
 }
 
+// to rotateWheels when pointermove above the display 
 
-function makeWheels() {
-    console.log('makeWheels great again!');
+function rotateWheels() {
+    
+
+    let displayElement = document.querySelectorAll('.display__element');
+    let arrayX = [];
+    let arrayY = [];
+
+    displayElement.forEach(element => element.addEventListener('pointerenter', event => {
+        //console.log('движение по оси X:', event.x);
+        
+        arrayX.push(event.x);
+        //console.log(arrayX);
+        if (arrayX[(arrayX.length - 1)] > arrayX[(arrayX.length - 2)]) {
+            //console.log('значение больше предыдущего');
+            arrayX.shift();
+            rotateLeftWheelRight();
+        }
+        else if (arrayX[(arrayX.length - 1)] < arrayX[(arrayX.length - 2)]){
+            //console.log('значение меньше предыдущего');
+            arrayX.shift();
+            rotateLeftWheelLeft();
+        };
+        
+        arrayY.push(event.y);
+        //console.log(arrayY);
+        if (arrayY[(arrayY.length - 1)] < arrayY[(arrayY.length - 2)]) {
+            //console.log('значение больше предыдущего');
+            arrayY.shift();
+            rotateRightWheelRight();
+        }
+        else if (arrayY[(arrayY.length - 1)] > arrayY[(arrayY.length - 2)]){
+            //console.log('значение меньше предыдущего');
+            arrayY.shift();
+            rotateRightWheelLeft();
+        };
+
+    }));
 }
 
+// functions for rotation of wheels for 5 min
+
+function rotateLeftWheelRight() {
+    let leftWheel = document.querySelector('.left__wheel');
+    leftWheel.classList.add('rotateRight15deg');
+
+    leftWheel.addEventListener('animationend', event => {leftWheel.classList.remove('rotateRight15deg')});
+
+        
+}
+
+function rotateLeftWheelLeft() {
+    let leftWheel = document.querySelector('.left__wheel');
+    leftWheel.classList.add('rotateLeft15deg');
+
+    leftWheel.addEventListener('animationend', event => {leftWheel.classList.remove('rotateLeft15deg')});
+}
+
+
+function rotateRightWheelRight() {
+    let rightWheel = document.querySelector('.right__wheel');
+    rightWheel.classList.add('rotateRight15deg');
+
+    rightWheel.addEventListener('animationend', event => {rightWheel.classList.remove('rotateRight15deg')});
+     
+}
+
+function rotateRightWheelLeft() {
+    let rightWheel = document.querySelector('.right__wheel');
+    rightWheel.classList.add('rotateLeft15deg');
+
+    rightWheel.addEventListener('animationend', event => {rightWheel.classList.remove('rotateLeft15deg')});
+}
 
 listenHoverButton();
 listenWheelsButton();
