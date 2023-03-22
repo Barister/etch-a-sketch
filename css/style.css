@@ -213,7 +213,7 @@ main button {
     animation-name: rotateRight;
     animation-duration: 5s;
     animation-iteration-count: infinite;
-    animation-timing-function: linear;
+    animation-timing-function: ease;
 }
 
 @keyframes rotateRight {
@@ -229,7 +229,7 @@ main button {
     animation-name: rotateLeft;
     animation-duration: 5s;
     animation-iteration-count: 1;
-    animation-timing-function: linear;
+    animation-timing-function: ease;
 }
 
 @keyframes rotateLeft {
@@ -245,14 +245,14 @@ main button {
     animation-name: rotateRight15deg;
     animation-duration: 0.5s;
     animation-iteration-count: 1;
-    animation-timing-function: linear;
+    animation-timing-function: ease;
 }
 
 .rotateLeft15deg {
     animation-name: rotateLeft15deg;
     animation-duration: 0.5s;
     animation-iteration-count: 1;
-    animation-timing-function: linear;
+    animation-timing-function: ease;
 }
 
 @keyframes rotateLeft15deg {

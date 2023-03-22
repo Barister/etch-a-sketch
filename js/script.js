@@ -124,7 +124,7 @@ function makeHover() {
     }
 
     function startDrawing(e) {
-        console.log('element:', e);
+        //console.log('element:', e);
         e.preventDefault();
             if (eraseSlider.value == 0 && e.button == 0) {
                 displayElement.forEach(element => element.addEventListener('pointermove', draw))}
@@ -225,70 +225,97 @@ let wheelsButton = document.querySelector('.wheels__button');
 function listenHoverButton() {
     if (hoverButton.classList.contains('active')) {
             rotateWheels();
+            //display.addEventListener('pointerdown', rotateWheels);
+            //display.addEventListener('pointerup', () => display.removeEventListener('pointerdown', rotateWheels));
             makeHover();
     }
 
     hoverButton.addEventListener('click', () => {
         
         if (hoverButton.classList.contains('active')) {
-            rotateWheels();
+            //rotateWheels();
             makeHover();
         }
     })
 }
 
 function listenWheelsButton() {
-    wheelsButton.addEventListener('click', () => {
+    wheelsButton.addEventListener('click', function test() {
         if (wheelsButton.classList.contains('active')) {
             
             console.log('Houston, we have a wheels button pressed!');
                         
         }
+        //else {wheelsButton.removeEventListener('click', test)}
     })
 }
 
-// to rotateWheels when pointermove above the display 
+// to rotateWheels when pointermove above the display made with ChatGPT.
 
 function rotateWheels() {
-    
-
     let displayElement = document.querySelectorAll('.display__element');
     let arrayX = [];
     let arrayY = [];
 
-    displayElement.forEach(element => element.addEventListener('pointerenter', event => {
-        //console.log('движение по оси X:', event.x);
-        
+    let pointerDown = false;
+    let pointerEnter = false;
+
+    function rotate() {
         arrayX.push(event.x);
-        //console.log(arrayX);
         if (arrayX[(arrayX.length - 1)] > arrayX[(arrayX.length - 2)]) {
-            //console.log('значение больше предыдущего');
             arrayX.shift();
             rotateLeftWheelRight();
         }
-        else if (arrayX[(arrayX.length - 1)] < arrayX[(arrayX.length - 2)]){
-            //console.log('значение меньше предыдущего');
+        else if (arrayX[(arrayX.length - 1)] < arrayX[(arrayX.length - 2)]) {
             arrayX.shift();
             rotateLeftWheelLeft();
-        };
-        
+        }
+
         arrayY.push(event.y);
-        //console.log(arrayY);
         if (arrayY[(arrayY.length - 1)] < arrayY[(arrayY.length - 2)]) {
-            //console.log('значение больше предыдущего');
             arrayY.shift();
             rotateRightWheelRight();
         }
-        else if (arrayY[(arrayY.length - 1)] > arrayY[(arrayY.length - 2)]){
-            //console.log('значение меньше предыдущего');
+        else if (arrayY[(arrayY.length - 1)] > arrayY[(arrayY.length - 2)]) {
             arrayY.shift();
             rotateRightWheelLeft();
-        };
+        }
+    }
 
+    function checkIfBothEventsHappened() {
+        if (pointerDown && pointerEnter) {
+            displayElement.forEach(element => element.addEventListener('pointerenter', rotate));
+            pointerDown = false;
+            pointerEnter = false;
+        }
+    }
+
+    display.addEventListener('pointerdown', function(event) {
+        pointerDown = true;
+        checkIfBothEventsHappened();
+    });
+
+    display.addEventListener('pointerenter', function(event) {
+        pointerEnter = true;
+        checkIfBothEventsHappened();
+    });
+
+    display.addEventListener('pointerup', function(event) {
+        pointerDown = false;
+        pointerEnter = false;
+        displayElement.forEach(element => element.removeEventListener('pointerenter', rotate));
+    });
+
+    displayElement.forEach(element => element.addEventListener('pointerenter', function(event) {
+        if (pointerDown) {
+            rotate();
+        }
     }));
 }
 
-// functions for rotation of wheels for 5 min
+
+
+// functions for rotation of wheels for 5 mins (deg)
 
 function rotateLeftWheelRight() {
     let leftWheel = document.querySelector('.left__wheel');
