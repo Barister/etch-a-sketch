@@ -204,6 +204,8 @@ main button {
  
 }
 
+/**** to turn off wheel hovers to test wheelsMode
+
 .wheel:hover {
     box-shadow: inset 0 0 10px rgba(0, 0, 0, .99);
     
@@ -240,6 +242,8 @@ main button {
         transform: rotate(0deg);
     }
 }
+
+****/
 
 .rotateRight15deg {
     animation-name: rotateRight15deg;

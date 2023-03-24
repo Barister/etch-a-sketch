@@ -54,7 +54,6 @@ function makeGrid() {
 
 makeGrid();
 
-//makeHover();
 
 // to make slider change of grid
 
@@ -107,10 +106,40 @@ function makeHover() {
                 let randomGreen = Math.floor(Math.random() * 255);
                 let randomBlue =  Math.floor(Math.random() * 255);
                 
-                this.style.backgroundColor = `rgb(${randomRed},${randomGreen},${randomBlue})`;
+                // to try mode to make colours darker after another pointerenter
+                if (this.style.backgroundColor && this.style.backgroundColor != '#000') {
+                    //console.log('diplayElement has color, and it aint black');
+                    let currentColor = this.style.backgroundColor;
+                    //ler regex = /rgb\((\d{1,3}), (\d{1,3}), (\d{1,3}))/
+                    //console.log([this.style.backgroundColor]);
+                    let rgbArray = currentColor.match(/\d+/g);
+                    //console.log(rgbArray);
+                    
+                    let darkerRGBArray = [];
+
+                    rgbArray.forEach(e => {
+                        if (e / 10 > 0) {
+                            e -= 25;
+                            //console.log(e);
+                            if (e < 0) {
+                                e = 0;
+                            }
+                        }
+                        darkerRGBArray.push(e);
+                    })
+
+                    //console.log('newArray:', darkerRGBArray);
+                    this.style.backgroundColor = `rgb(${darkerRGBArray[0]},${darkerRGBArray[1]},${darkerRGBArray[2]})`;
+
+                } else {
+                this.style.backgroundColor = `rgb(${randomRed},${randomGreen},${randomBlue})`; 
+                }
+            
             }
             
-        }
+            
+        }    
+        
         
         element.preventDefault();
     }
@@ -219,38 +248,28 @@ let colorButton = document.querySelector('.color__button');
 
 // to make wheels rotation
 
+// easy mode to repeat mouse moves
+
 let hoverButton = document.querySelector('.hover__button');
 let wheelsButton = document.querySelector('.wheels__button');
 
 function listenHoverButton() {
     if (hoverButton.classList.contains('active')) {
             rotateWheels();
-            //display.addEventListener('pointerdown', rotateWheels);
-            //display.addEventListener('pointerup', () => display.removeEventListener('pointerdown', rotateWheels));
+            
             makeHover();
     }
 
     hoverButton.addEventListener('click', () => {
         
         if (hoverButton.classList.contains('active')) {
-            //rotateWheels();
+            
             makeHover();
         }
     })
 }
 
-function listenWheelsButton() {
-    wheelsButton.addEventListener('click', function test() {
-        if (wheelsButton.classList.contains('active')) {
-            
-            console.log('Houston, we have a wheels button pressed!');
-                        
-        }
-        //else {wheelsButton.removeEventListener('click', test)}
-    })
-}
-
-// to rotateWheels when pointermove above the display made with ChatGPT.
+// to rotateWheels in hoverMode when pointermove above the display made with ChatGPT.
 
 function rotateWheels() {
     let displayElement = document.querySelectorAll('.display__element');
@@ -313,8 +332,6 @@ function rotateWheels() {
     }));
 }
 
-
-
 // functions for rotation of wheels for 5 mins (deg)
 
 function rotateLeftWheelRight() {
@@ -352,4 +369,89 @@ function rotateRightWheelLeft() {
 listenHoverButton();
 listenWheelsButton();
 
+// hard mode to draw by wheels
 
+function listenWheelsButton() {
+    wheelsButton.addEventListener('click', function () {
+        if (wheelsButton.classList.contains('active')) {
+            
+            console.log('Houston, we have a wheels button pressed!');
+            toStartWheelsMode();            
+        }
+        
+    });
+}
+
+// big part about drawing by wheels mode
+
+function toStartWheelsMode() {
+    let leftWheel = document.querySelector('.left__wheel');
+    let rightWheel = document.querySelector('.right__wheel');
+    
+    let leftWheelAngle = 0;
+    let rightWheelAngle = 0;
+
+    function rotateLeftWheel(angle) {
+        leftWheel.style.transform = `rotate(${angle}deg)`;
+    }
+
+    function rotateRightWheel(angle) {
+        rightWheel.style.transform = `rotate(${angle}deg)`;
+    }
+
+    document.addEventListener('keydown', event => {
+        switch (event.code) {
+            case 'KeyA':
+                leftWheelAngle -= 10;
+                rotateLeftWheel(leftWheelAngle);
+                break;
+            case 'KeyZ':
+                leftWheelAngle += 10;
+                rotateLeftWheel(leftWheelAngle);
+                break;
+            case 'KeyK':
+                rightWheelAngle += 10;
+                rotateRightWheel(rightWheelAngle);
+                break;
+            case 'KeyM':
+                rightWheelAngle -= 10;
+                rotateRightWheel(rightWheelAngle);
+                break;
+            default:
+                break;
+            
+        }
+    });
+
+
+    let isMouseDown = false;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+
+    document.addEventListener('pointerdown', event => {
+        if (event.button === 0) {
+            isMouseDown = true;
+            lastMouseX = event.clientX;
+            lastMouseY = event.clientY;
+        }
+    });
+
+    document.addEventListener('pointerup', event => {
+        if (event.button === 0) {
+            isMouseDown = false;
+        }
+    });
+
+    document.addEventListener('pointermove', event => {
+        if(isMouseDown) {
+            let deltaX = event.clientX - lastMouseX;
+            let deltaY = event.clientY - lastMouseY;
+            leftWheelAngle += deltaX;
+            rightWheelAngle += deltaY;
+            rotateLeftWheel(leftWheelAngle);
+            rotateRightWheel(rightWheelAngle);
+            lastMouseX = event.clientX;
+            lastMouseY = event.clientY;
+        }
+    });
+}
