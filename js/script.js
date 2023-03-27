@@ -18,9 +18,12 @@ function clearGrid() {
 }
 
 // to make a grid for display
+let count = 1;
+
 function makeGrid() {
     let displayWidth = document.querySelector('.resolution__width').innerHTML;
     let displayHeight = document.querySelector('.resolution__height').innerHTML;
+    
 
     for (let i = 0; i < displayHeight; i++) {
         const displayRow = document.createElement('div');
@@ -32,11 +35,11 @@ function makeGrid() {
         
         for (let j = 0; j < displayWidth; j++) {
             const displayElement = document.createElement('div')
-            displayElement.setAttribute('class', 'display__element');
+            displayElement.setAttribute('class', `display__element cell__${count}`);
             displayElement.style.width = displayResolutionWidth / displayWidth + 'px';
             // displayElement.style.border = '1px solid black';
             displayRow.appendChild(displayElement);
-            
+            count++;            
         }
     }
 
@@ -361,12 +364,14 @@ listenHoverButton();
 listenWheelsButton();
 
 // hard mode to draw by wheels
+let firstStart = false;
 
 function listenWheelsButton() {
     wheelsButton.addEventListener('click', function () {
         if (wheelsButton.classList.contains('active')) {
-            
+            firstStart = true;
             console.log('Houston, we have a wheels button pressed!');
+            toDetermineStartCell();
             toStartWheelsMode();            
         }
         
@@ -374,6 +379,16 @@ function listenWheelsButton() {
 }
 
 // big part about drawing by wheels mode
+
+// to determine a cell to start drawing
+let startCell;
+
+function toDetermineStartCell() {
+    if (firstStart) {
+        startCell = display.querySelector(`.cell__${Math.floor(Math.random() * count)}`);
+        console.log('startCell:', startCell);
+    }
+}
 
 function toStartWheelsMode() {
     let leftWheel = document.querySelector('.left__wheel');
@@ -420,6 +435,7 @@ function toStartWheelsMode() {
     let lastMouseY = 0;
 
     document.addEventListener('pointerdown', event => {
+        event.preventDefault();
         if (event.button === 0) {
             isMouseDown = true;
             lastMouseX = event.clientX;
@@ -433,7 +449,8 @@ function toStartWheelsMode() {
         }
     });
 
-    document.addEventListener('pointerenter', event => {
+    document.addEventListener('pointermove', event => {
+        event.preventDefault();
         if(isMouseDown) {
             let deltaX = event.clientX - lastMouseX;
             let deltaY = event.clientY - lastMouseY;
