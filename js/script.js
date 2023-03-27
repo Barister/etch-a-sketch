@@ -6,20 +6,9 @@ const displayResolutionWidth = display.offsetWidth;
 const displayResolutionHeight = display.offsetHeight;
 
 // test for rightclick 
-let displayButton = display.addEventListener('pointerdown', event => event.button);
-
-
-
-
-    
-//console.log('displayButton:', displayButton);
 
 // to disable for open context menu by right click in display
 display.addEventListener('contextmenu', event => event.preventDefault());
-
-// to clear displayGrid
-
-//console.log('displayButton:', displayButton);
 
 function clearGrid() {
     document.querySelectorAll('.display__row')
@@ -50,6 +39,9 @@ function makeGrid() {
             
         }
     }
+
+    //makeHover();
+    
 }
 
 makeGrid();
@@ -82,20 +74,19 @@ function sizeChange() {
 
 
 
-// to make hover effect
+// to draw by mouse in hover mode
 
 function makeHover() {
 
     let displayElement = document.querySelectorAll('.display__element');
     let eraseSlider = document.querySelector('.clear__slider');
 
-    // func outside to have possibility to remove it if slider.value is > 0;
-    // contains condition of choosing color 
+    // func to have possibility to remove drawings if eraseSlider.value is > 0;
+    // contains condition for choosing color 
 
     function draw(element) {
-
-          
-
+        element.preventDefault();
+       
         if (hoverButton.classList.contains('active')) {
 
             if (blackButton.classList.contains('active')){
@@ -108,19 +99,15 @@ function makeHover() {
                 
                 // to try mode to make colours darker after another pointerenter
                 if (this.style.backgroundColor && this.style.backgroundColor != '#000') {
-                    //console.log('diplayElement has color, and it aint black');
-                    let currentColor = this.style.backgroundColor;
-                    //ler regex = /rgb\((\d{1,3}), (\d{1,3}), (\d{1,3}))/
-                    //console.log([this.style.backgroundColor]);
-                    let rgbArray = currentColor.match(/\d+/g);
-                    //console.log(rgbArray);
-                    
+                                                      
+                    let rgbArray = this.style.backgroundColor.match(/\d+/g);
+                                        
                     let darkerRGBArray = [];
 
                     rgbArray.forEach(e => {
                         if (e / 10 > 0) {
                             e -= 25;
-                            //console.log(e);
+                            
                             if (e < 0) {
                                 e = 0;
                             }
@@ -128,7 +115,6 @@ function makeHover() {
                         darkerRGBArray.push(e);
                     })
 
-                    //console.log('newArray:', darkerRGBArray);
                     this.style.backgroundColor = `rgb(${darkerRGBArray[0]},${darkerRGBArray[1]},${darkerRGBArray[2]})`;
 
                 } else {
@@ -141,38 +127,43 @@ function makeHover() {
         }    
         
         
-        element.preventDefault();
+        
     }
 
+    // func to erase display element
+
     function erase(element) {
-        if (hoverButton.classList.contains('active')) {
+        element.preventDefault();
+        
+        if (hoverButton.classList.contains('active') && element.button === 2) {
                 this.style.backgroundColor = ``;
-            
-            
         }
     }
 
     function startDrawing(e) {
-        //console.log('element:', e);
+        
         e.preventDefault();
-            if (eraseSlider.value == 0 && e.button == 0) {
-                displayElement.forEach(element => element.addEventListener('pointermove', draw))}
-            else if(eraseSlider.value == 0 && e.button == 2) {
-                displayElement.forEach(element => element.addEventListener('pointerdown', erase))
+            if (eraseSlider.value == 0 && e.which === 1) {
+                displayElement.forEach(element => element.addEventListener('pointerdown', draw));
+                displayElement.forEach(element => element.addEventListener('pointerenter', draw));
+            }
+            else if(eraseSlider.value == 0 && e.which === 3) {
+                displayElement.forEach(element => element.addEventListener('pointerdown', erase));
             }    
             
          
     }
 
-    display.addEventListener('pointerdown', startDrawing);
+    display.addEventListener('pointerover', startDrawing);
 
     display.addEventListener('pointerup', () => {
-        displayElement.forEach(element => element.removeEventListener('pointermove', draw));
+        displayElement.forEach(element => element.removeEventListener('pointerenter', draw));
+        
         display.addEventListener('pointerdown', startDrawing);
     });
 
     display.addEventListener('pointerleave', () => {
-        displayElement.forEach(element => element.removeEventListener('pointermove', draw));
+        displayElement.forEach(element => element.removeEventListener('pointerenter', draw));
     });
 }
 
@@ -442,7 +433,7 @@ function toStartWheelsMode() {
         }
     });
 
-    document.addEventListener('pointermove', event => {
+    document.addEventListener('pointerenter', event => {
         if(isMouseDown) {
             let deltaX = event.clientX - lastMouseX;
             let deltaY = event.clientY - lastMouseY;
