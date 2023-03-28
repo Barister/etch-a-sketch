@@ -91,7 +91,7 @@ main button {
 
 
 
-.help__button button {
+.button__help {
     width: 40px;
     padding: 5px;
     margin-right: 20px;
@@ -122,6 +122,25 @@ main button {
     justify-content: space-between;
     z-index: 100;
 }
+
+.display__help {
+    padding: 10px;
+    display: none;
+    position: relative;
+    z-index: 100;
+    /* flex-direction: column; */
+    flex-wrap: wrap;
+    /* justify-content: center; */
+    gap: 15px;
+    overflow: auto;
+}
+
+.display__help h1{
+    font-size: 20px;
+    line-height: 1.25;
+    margin-bottom: 20px;
+}
+
 .middle__right {
     width: 80px;
     display: flex;

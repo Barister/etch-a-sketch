@@ -5,7 +5,25 @@ let display = document.querySelector('.middle__display');
 const displayResolutionWidth = display.offsetWidth;
 const displayResolutionHeight = display.offsetHeight;
 
-// test for rightclick 
+// to display help
+
+let helpButton = document.querySelector('.button__help');
+let displayHelp = document.querySelector('.display__help');
+
+helpButton.addEventListener('click', event => {
+    console.log('Help displayed');
+    if (helpButton.classList.contains('active')) {
+        displayHelp.style.display = 'none';
+        helpButton.classList.remove('active');
+        document.querySelectorAll('.display__row').forEach(element => element.style.display = 'flex');
+    }
+    else {
+        displayHelp.style.display = 'flex';
+        helpButton.classList.add('active');
+        document.querySelectorAll('.display__row').forEach(element => element.style.display = 'none');
+    }
+    
+});
 
 // to disable for open context menu by right click in display
 display.addEventListener('contextmenu', event => event.preventDefault());

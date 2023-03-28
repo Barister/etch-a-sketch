@@ -25,7 +25,7 @@
                     <input class="clear__slider" type="range" step="1" value="0" min="0" max="16" oninput="eraseDisplay()">
                 </div>
                 <div class="help__button">
-                    <button>?</button>
+                    <button class="button__help">?</button>
                 </div>
             </div>
 
@@ -33,7 +33,26 @@
                 <div class="middle__left">
                     
                 </div>
-                <div class="middle__display"></div>
+                <div class="middle__display">
+                    <div class="display__help">
+                        <h1>Welcome to my home project from The Odin Project Foundations curriculum, Etch-A-Sketch like app.</h1>
+    
+                            <p>You can draw in two different modes: using the mouse (Mouse button) or the wheels below the screen (Wheels button).</p>
+                            
+                            <p>In Mouse mode, right-click erases the color of one cell.</p>
+                            
+                            <p>For drawing in Wheels mode, use the A and Z buttons for horizontal drawing and the K and M buttons for vertical drawing. You can also try controlling the wheels with the mouse.</p>
+                            
+                            <p>A cell can be filled with black color (Black button) or a random color from the RGB palette (Color button).</p>
+                            
+                            <p>If you color the grid again, it will become darker towards black by about 10%.</p>
+                            
+                            <p>To clear the screen, use the top slider. Slide it all the way to the right and back to start draw again.</p>
+                            
+                            <p>The right slider changes the screen resolution.</p>
+                    </div>
+                </div>
+                
                 <div class="middle__right">
                     <div class="size__slider">
                         <input class="vertical__slider" type="range" step="16" orient="vertical" value="16" min="16" max="96" oninput="sizeChange()">
@@ -52,7 +71,7 @@
                 </div>
                 <div class="bottom__title">Etch A Sketch</div>
                 <div class="bottom__right">
-                    <button class="hover__button active">hover</button>
+                    <button class="hover__button active">mouse</button>
                     <button class="wheels__button">wheels</button>
                 </div>
                 <div class="right__wheel wheel"></div>
