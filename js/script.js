@@ -55,7 +55,7 @@ function makeGrid() {
             const displayElement = document.createElement('div')
             displayElement.setAttribute('class', `display__element cell__${count}`);
             displayElement.style.width = displayResolutionWidth / displayWidth + 'px';
-            // displayElement.style.border = '1px solid black';
+            //displayElement.style.border = '1px dashed black';
             displayRow.appendChild(displayElement);
             count++;            
         }
@@ -105,9 +105,16 @@ function makeHover() {
     // func to have possibility to remove drawings if eraseSlider.value is > 0;
     // contains condition for choosing color 
 
+    // let countDraw = 0;
     function draw(element) {
         element.preventDefault();
-       
+        
+        // countDraw++;
+        // console.log('draw: что такое this:', this);
+        // console.log('draw: что такое element:', element);
+        // console.log('draw: что такое event:', event);
+        // console.log('сработала func draw раз:', countDraw);
+
         if (hoverButton.classList.contains('active')) {
 
             if (blackButton.classList.contains('active')){
@@ -147,23 +154,34 @@ function makeHover() {
             
         }    
         
-        
+    display.addEventListener    
         
     }
 
     // func to erase display element
 
+    //let countErase = 0;
+
     function erase(element) {
         element.preventDefault();
         
+        // countErase++;
+        // console.log('функция erase сработала раз:', countErase);
+
         if (hoverButton.classList.contains('active') && element.button === 2) {
                 this.style.backgroundColor = ``;
         }
     }
 
+    let countStartDrawing = 0;
+
     function startDrawing(e) {
         
         e.preventDefault();
+        countStartDrawing++;
+        // console.log('e.target внутри starDrawing:', e.target);
+        // console.log('e.which внутри starDrawing:', e.which);
+        // console.log('starDrawing сработала раз:', countStartDrawing);
             if (eraseSlider.value == 0 && e.which === 1) {
                 displayElement.forEach(element => element.addEventListener('pointerdown', draw));
                 displayElement.forEach(element => element.addEventListener('pointerenter', draw));
@@ -175,15 +193,70 @@ function makeHover() {
          
     }
 
-    display.addEventListener('pointerover', startDrawing);
+    
+    display.addEventListener('pointerdown', startDrawing);
+    
+    display.addEventListener('pointerdown', event => {
+        //console.log('event внутри pointerdown', event.target.closest('.display__element'));
+
+        let eventTarget = event.target.closest('.display__element');
+        if (eventTarget && event.which === 1 && eraseSlider.value == 0) {
+
+            if (hoverButton.classList.contains('active')) {
+
+                if (blackButton.classList.contains('active')){
+                    eventTarget.style.backgroundColor = '#000';
+                }
+                else if (colorButton.classList.contains('active')) {
+                    let randomRed = Math.floor(Math.random() * 255);
+                    let randomGreen = Math.floor(Math.random() * 255);
+                    let randomBlue =  Math.floor(Math.random() * 255);
+                    
+                    // to try mode to make colours darker after another pointerenter
+                    if (eventTarget.style.backgroundColor && eventTarget.style.backgroundColor != '#000') {
+                                                          
+                        let rgbArray = eventTarget.style.backgroundColor.match(/\d+/g);
+                                            
+                        let darkerRGBArray = [];
+    
+                        rgbArray.forEach(e => {
+                            if (e / 10 > 0) {
+                                e -= 25;
+                                
+                                if (e < 0) {
+                                    e = 0;
+                                }
+                            }
+                            darkerRGBArray.push(e);
+                        })
+    
+                        eventTarget.style.backgroundColor = `rgb(${darkerRGBArray[0]},${darkerRGBArray[1]},${darkerRGBArray[2]})`;
+    
+                    } else {
+                    eventTarget.style.backgroundColor = `rgb(${randomRed},${randomGreen},${randomBlue})`; 
+                    }
+                
+                }
+                
+                
+            }  
+        }
+        else if (eventTarget && hoverButton.classList.contains('active') && event.which === 3) {
+            eventTarget.style.backgroundColor = ``;
+        }
+    });
 
     display.addEventListener('pointerup', () => {
+
+        //console.log('сработал обработчик pointerup');
+
         displayElement.forEach(element => element.removeEventListener('pointerenter', draw));
         
         display.addEventListener('pointerdown', startDrawing);
     });
 
     display.addEventListener('pointerleave', () => {
+        //console.log('сработал обработчик pointerleave');
         displayElement.forEach(element => element.removeEventListener('pointerenter', draw));
     });
 }
@@ -388,7 +461,9 @@ function listenWheelsButton() {
     wheelsButton.addEventListener('click', function () {
         if (wheelsButton.classList.contains('active')) {
             firstStart = true;
+            
             console.log('Houston, we have a wheels button pressed!');
+
             toDetermineStartCell();
             toStartWheelsMode();            
         }
@@ -453,7 +528,7 @@ function toStartWheelsMode() {
     let lastMouseY = 0;
 
     document.addEventListener('pointerdown', event => {
-        event.preventDefault();
+        //event.preventDefault();
         if (event.button === 0) {
             isMouseDown = true;
             lastMouseX = event.clientX;
@@ -468,7 +543,7 @@ function toStartWheelsMode() {
     });
 
     document.addEventListener('pointermove', event => {
-        event.preventDefault();
+        //event.preventDefault();
         if(isMouseDown) {
             let deltaX = event.clientX - lastMouseX;
             let deltaY = event.clientY - lastMouseY;
