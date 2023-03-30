@@ -36,12 +36,13 @@ function clearGrid() {
 }
 
 // to make a grid for display
-let count = 1;
+let countGrids = 1;
 
 function makeGrid() {
     let displayWidth = document.querySelector('.resolution__width').innerHTML;
     let displayHeight = document.querySelector('.resolution__height').innerHTML;
     
+    countGrids = 1;
 
     for (let i = 0; i < displayHeight; i++) {
         const displayRow = document.createElement('div');
@@ -53,15 +54,17 @@ function makeGrid() {
         
         for (let j = 0; j < displayWidth; j++) {
             const displayElement = document.createElement('div')
-            displayElement.setAttribute('class', `display__element cell__${count}`);
+            displayElement.setAttribute('class', `display__element cell__${countGrids}`);
             displayElement.style.width = displayResolutionWidth / displayWidth + 'px';
             //displayElement.style.border = '1px dashed black';
             displayRow.appendChild(displayElement);
-            count++;            
+            countGrids++;            
         }
     }
 
     //makeHover();
+    //listenHoverButton();
+    //listenWheelsButton();
     
 }
 
@@ -91,6 +94,7 @@ function sizeChange() {
     clearGrid();
     makeGrid();
     listenHoverButton();
+    listenWheelsButton();
 }
 
 
@@ -154,8 +158,6 @@ function makeHover() {
             
         }    
         
-    display.addEventListener    
-        
     }
 
     // func to erase display element
@@ -193,9 +195,12 @@ function makeHover() {
          
     }
 
+    // eventlisteners for mouse and touch down to draw
     
     display.addEventListener('pointerdown', startDrawing);
     
+    //crazy fix for drawing by the first click 
+
     display.addEventListener('pointerdown', event => {
         //console.log('event внутри pointerdown', event.target.closest('.display__element'));
 
@@ -348,7 +353,8 @@ function listenHoverButton() {
     hoverButton.addEventListener('click', () => {
         
         if (hoverButton.classList.contains('active')) {
-            
+            clearGrid();
+            makeGrid();
             makeHover();
         }
     })
@@ -457,12 +463,21 @@ listenWheelsButton();
 // hard mode to draw by wheels
 let firstStart = false;
 
+if (wheelsButton.classList.contains('active')){
+    firstStart = true;
+
+    listenWheelsButton();
+}
+
 function listenWheelsButton() {
     wheelsButton.addEventListener('click', function () {
+        clearGrid();
+        makeGrid();
         if (wheelsButton.classList.contains('active')) {
             firstStart = true;
             
             console.log('Houston, we have a wheels button pressed!');
+            console.log('firstStart:', firstStart);
 
             toDetermineStartCell();
             toStartWheelsMode();            
@@ -475,13 +490,24 @@ function listenWheelsButton() {
 
 // to determine a cell to start drawing
 let startCell;
+let activeCell;
 
 function toDetermineStartCell() {
     if (firstStart) {
-        startCell = display.querySelector(`.cell__${Math.floor(Math.random() * count)}`);
-        console.log('startCell:', startCell);
+        startCell = display.querySelector(`.cell__${Math.floor(Math.random() * countGrids)}`);
+        //console.log('startCell:', startCell);
+
+        activeCell = startCell;
+        console.log('activeCell:', activeCell);
     }
 }
+
+
+
+// horizontal cells
+
+//let leftCell = activeCell.previousElementSibling;
+
 
 function toStartWheelsMode() {
     let leftWheel = document.querySelector('.left__wheel');
@@ -499,22 +525,52 @@ function toStartWheelsMode() {
     }
 
     document.addEventListener('keydown', event => {
+        activeCell.style.backgroundColor = '#000';
         switch (event.code) {
             case 'KeyA':
                 leftWheelAngle -= 10;
                 rotateLeftWheel(leftWheelAngle);
+                let leftCell = activeCell.previousElementSibling;
+                if (leftCell) {
+                    leftCell.style.backgroundColor = '#000';
+                    activeCell = leftCell;
+                }
                 break;
             case 'KeyZ':
                 leftWheelAngle += 10;
                 rotateLeftWheel(leftWheelAngle);
+                let rightCell = activeCell.nextElementSibling;
+                if (rightCell) {
+                    rightCell.style.backgroundColor = '#000';
+                    activeCell = rightCell;
+                }
                 break;
             case 'KeyK':
                 rightWheelAngle += 10;
                 rotateRightWheel(rightWheelAngle);
+                //let countCellsWidth = parseInt(document.querySelector('.resolution__width').outerText);
+                //console.log('количество ячеек в ряду:', countCellsWidth);
+                //let upperCell = display.querySelector(`.cell__${parseInt(activeCell.outerText) - countCellsWidth}`);
+                let parentRow = activeCell.parentElement;
+                let count = Array.from(parentRow.children).indexOf(activeCell);
+                let upperRow = parentRow.previousElementSibling;
+                let upperCell = upperRow.children[count];
+                if (upperCell) {
+                    upperCell.style.backgroundColor = '#000';
+                    activeCell = upperCell;
+                }
                 break;
             case 'KeyM':
                 rightWheelAngle -= 10;
                 rotateRightWheel(rightWheelAngle);
+                //let parentRow = activeCell.parentElement;
+                //let count = Array.from(parentRow.children).indexOf(activeCell);
+                let lowerRow = activeCell.parentElement.nextElementSibling;
+                let lowerCell = lowerRow.children[Array.from(activeCell.parentElement.children).indexOf(activeCell)];
+                if (lowerCell) {
+                    lowerCell.style.backgroundColor = '#000';
+                    activeCell = lowerCell;
+                }
                 break;
             default:
                 break;
