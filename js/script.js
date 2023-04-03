@@ -504,10 +504,6 @@ function toDetermineStartCell() {
 
 
 
-// horizontal cells
-
-//let leftCell = activeCell.previousElementSibling;
-
 
 function toStartWheelsMode() {
     let leftWheel = document.querySelector('.left__wheel');
@@ -518,21 +514,60 @@ function toStartWheelsMode() {
 
     function rotateLeftWheel(angle) {
         leftWheel.style.transform = `rotate(${angle}deg)`;
+        console.log('leftWheelAngle:', angle);
     }
 
     function rotateRightWheel(angle) {
         rightWheel.style.transform = `rotate(${angle}deg)`;
+        console.log('rightWheelAngle:', angle);
+    }
+
+    function toDraw(cell) {
+        if (blackButton.classList.contains('active')){
+            cell.style.backgroundColor = '#000';
+        }
+        else if (colorButton.classList.contains('active')) {
+            let randomRed = Math.floor(Math.random() * 255);
+            let randomGreen = Math.floor(Math.random() * 255);
+            let randomBlue =  Math.floor(Math.random() * 255);
+            
+            // to try mode to make colours darker after another pointerenter
+            if (cell.style.backgroundColor && cell.style.backgroundColor != '#000') {
+                                                  
+                let rgbArray = cell.style.backgroundColor.match(/\d+/g);
+                                    
+                let darkerRGBArray = [];
+
+                rgbArray.forEach(e => {
+                    if (e / 10 > 0) {
+                        e -= 25;
+                        
+                        if (e < 0) {
+                            e = 0;
+                        }
+                    }
+                    darkerRGBArray.push(e);
+                })
+
+                cell.style.backgroundColor = `rgb(${darkerRGBArray[0]},${darkerRGBArray[1]},${darkerRGBArray[2]})`;
+
+            } else {
+            cell.style.backgroundColor = `rgb(${randomRed},${randomGreen},${randomBlue})`; 
+            }
+        
+        }
     }
 
     document.addEventListener('keydown', event => {
-        activeCell.style.backgroundColor = '#000';
+        //activeCell.style.backgroundColor = '#000';
         switch (event.code) {
             case 'KeyA':
                 leftWheelAngle -= 10;
                 rotateLeftWheel(leftWheelAngle);
                 let leftCell = activeCell.previousElementSibling;
                 if (leftCell) {
-                    leftCell.style.backgroundColor = '#000';
+                    toDraw(leftCell);
+                    //leftCell.style.backgroundColor = '#000';
                     activeCell = leftCell;
                 }
                 break;
@@ -541,34 +576,35 @@ function toStartWheelsMode() {
                 rotateLeftWheel(leftWheelAngle);
                 let rightCell = activeCell.nextElementSibling;
                 if (rightCell) {
-                    rightCell.style.backgroundColor = '#000';
+                    toDraw(rightCell);
+                    //rightCell.style.backgroundColor = '#000';
                     activeCell = rightCell;
                 }
                 break;
             case 'KeyK':
                 rightWheelAngle += 10;
                 rotateRightWheel(rightWheelAngle);
-                //let countCellsWidth = parseInt(document.querySelector('.resolution__width').outerText);
-                //console.log('количество ячеек в ряду:', countCellsWidth);
-                //let upperCell = display.querySelector(`.cell__${parseInt(activeCell.outerText) - countCellsWidth}`);
+                
                 let parentRow = activeCell.parentElement;
                 let count = Array.from(parentRow.children).indexOf(activeCell);
                 let upperRow = parentRow.previousElementSibling;
                 let upperCell = upperRow.children[count];
                 if (upperCell) {
-                    upperCell.style.backgroundColor = '#000';
+                    toDraw(upperCell);
+                    //upperCell.style.backgroundColor = '#000';
                     activeCell = upperCell;
                 }
                 break;
             case 'KeyM':
                 rightWheelAngle -= 10;
                 rotateRightWheel(rightWheelAngle);
-                //let parentRow = activeCell.parentElement;
-                //let count = Array.from(parentRow.children).indexOf(activeCell);
+                
+                
                 let lowerRow = activeCell.parentElement.nextElementSibling;
                 let lowerCell = lowerRow.children[Array.from(activeCell.parentElement.children).indexOf(activeCell)];
                 if (lowerCell) {
-                    lowerCell.style.backgroundColor = '#000';
+                    toDraw(lowerCell);
+                    //lowerCell.style.backgroundColor = '#000';
                     activeCell = lowerCell;
                 }
                 break;
@@ -583,8 +619,28 @@ function toStartWheelsMode() {
     let lastMouseX = 0;
     let lastMouseY = 0;
 
-    document.addEventListener('pointerdown', event => {
-        //event.preventDefault();
+    
+
+    // document.addEventListener('pointerdown', event => {
+    //     event.preventDefault();
+    //     if (event.button === 0) {
+    //         isMouseDown = true;
+    //         lastMouseX = event.clientX;
+    //         lastMouseY = event.clientY;
+    //     }
+    // });
+
+    leftWheel.addEventListener('pointerdown', event => {
+        event.preventDefault();
+        if (event.button === 0) {
+            isMouseDown = true;
+            lastMouseX = event.clientX;
+            lastMouseY = event.clientY;
+        }
+    });
+
+    rightWheel.addEventListener('pointerdown', event => {
+        event.preventDefault();
         if (event.button === 0) {
             isMouseDown = true;
             lastMouseX = event.clientX;
@@ -598,16 +654,30 @@ function toStartWheelsMode() {
         }
     });
 
-    document.addEventListener('pointermove', event => {
-        //event.preventDefault();
+    leftWheel.addEventListener('pointermove', event => {
+        event.preventDefault();
         if(isMouseDown) {
             let deltaX = event.clientX - lastMouseX;
-            let deltaY = event.clientY - lastMouseY;
+            
             leftWheelAngle += deltaX;
-            rightWheelAngle += deltaY;
+         
             rotateLeftWheel(leftWheelAngle);
-            rotateRightWheel(rightWheelAngle);
+       
             lastMouseX = event.clientX;
+       
+        }
+    });
+
+    rightWheel.addEventListener('pointermove', event => {
+        event.preventDefault();
+        if(isMouseDown) {
+            //let deltaX = event.clientX - lastMouseX;
+            let deltaY = event.clientY - lastMouseY;
+            //leftWheelAngle += deltaX;
+            rightWheelAngle += deltaY;
+            //rotateLeftWheel(leftWheelAngle);
+            rotateRightWheel(rightWheelAngle);
+            //lastMouseX = event.clientX;
             lastMouseY = event.clientY;
         }
     });
