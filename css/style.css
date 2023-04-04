@@ -320,7 +320,12 @@ main button {
     gap: 10px;
 }
 
+.left__wheel {
+    transform: rotate(0deg);
+}
+
 .right__wheel {
+    transform: rotate(0deg);
 }
 
 
