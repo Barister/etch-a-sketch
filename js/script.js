@@ -461,26 +461,38 @@ listenHoverButton();
 listenWheelsButton();
 
 // hard mode to draw by wheels
-let firstStart = false;
+let firstStart = 0;
 
-if (wheelsButton.classList.contains('active')){
-    firstStart = true;
-
-    listenWheelsButton();
-}
+let startCell;
+let activeCell;
 
 function listenWheelsButton() {
+    if (wheelsButton.classList.contains('active')){
+    firstStart = 0;
+
+    toDetermineStartCell();
+    toStartWheelsMode();  
+
+    console.log('Запущена listenWheelsButton')
+    
+}
+
     wheelsButton.addEventListener('click', function () {
+        
         clearGrid();
         makeGrid();
         if (wheelsButton.classList.contains('active')) {
-            firstStart = true;
+            firstStart += 1;
             
-            console.log('Houston, we have a wheels button pressed!');
+            
+
+            console.log('Сработал обработчик событий по клику!');
             console.log('firstStart:', firstStart);
 
             toDetermineStartCell();
-            toStartWheelsMode();            
+            toStartWheelsMode(); 
+            
+            
         }
         
     });
@@ -489,16 +501,20 @@ function listenWheelsButton() {
 // big part about drawing by wheels mode
 
 // to determine a cell to start drawing
-let startCell;
-let activeCell;
+
 
 function toDetermineStartCell() {
-    if (firstStart) {
+    if (firstStart === 1) {
         startCell = display.querySelector(`.cell__${Math.floor(Math.random() * countGrids)}`);
-        //console.log('startCell:', startCell);
+        console.log('startCell:', startCell);
 
         activeCell = startCell;
         console.log('activeCell:', activeCell);
+    }
+    else {
+        console.log('activeCell != startCell:', activeCell);
+        activeCell = display.querySelector(`.${activeCell.classList[1]}`);
+        document.removeEventListener('keydown', listenKeys);
     }
 }
 
@@ -512,63 +528,67 @@ function toStartWheelsMode() {
     let leftWheelAngle = 0;
     let rightWheelAngle = 0;
 
+    //document.removeEventListener('keydown', listenKeys);
+
     function rotateLeftWheel(angle) {
         leftWheel.style.transform = `rotate(${angle}deg)`;
-        console.log('angle:', angle);
-        console.log('angle - leftWheelAngle:', angle - leftWheelAngle);
-        if ((angle - leftWheelAngle) >= 5) {
+        //console.log('angle:', angle);
+        //console.log('angle - leftWheelAngle:', angle - leftWheelAngle);
+        // if ((angle - leftWheelAngle) >= 5) {
             
-            let rightCell = activeCell.nextElementSibling;
-                if (rightCell) {
-                    toDraw(rightCell);
-                    //rightCell.style.backgroundColor = '#000';
-                    activeCell = rightCell;
-                    // angle = 0;
-                    // leftWheelAngle = 0;
-                }
-        }
-        else if ((angle - leftWheelAngle) <= -5) {
-            let leftCell = activeCell.previousElementSibling;
-                if (leftCell) {
-                    toDraw(leftCell);
-                    //leftCell.style.backgroundColor = '#000';
-                    activeCell = leftCell;
-                    // angle = 0;
-                    // leftWheelAngle = 0;
-                }
-        }
+        //     let rightCell = activeCell.nextElementSibling;
+        //         if (rightCell) {
+        //             toDraw(rightCell);
+        //             //rightCell.style.backgroundColor = '#000';
+        //             activeCell = rightCell;
+        //             // angle = 0;
+        //             // leftWheelAngle = 0;
+        //         }
+        // }
+        // else if ((angle - leftWheelAngle) <= -5) {
+        //     let leftCell = activeCell.previousElementSibling;
+        //         if (leftCell) {
+        //             toDraw(leftCell);
+        //             //leftCell.style.backgroundColor = '#000';
+        //             activeCell = leftCell;
+        //             // angle = 0;
+        //             // leftWheelAngle = 0;
+        //         }
+        // }
         
-        console.log('leftWheelAngle:', angle);
+        //console.log('leftWheelAngle:', angle);
     }
 
     function rotateRightWheel(angle) {
         rightWheel.style.transform = `rotate(${angle}deg)`;
-        console.log('rightWheelAngle:', angle);
-        if ((angle - rightWheelAngle) >= 5) {
+        //console.log('rightWheelAngle:', angle);
+        // if ((angle - rightWheelAngle) >= 5) {
             
-            let parentRow = activeCell.parentElement;
-                let count = Array.from(parentRow.children).indexOf(activeCell);
-                let upperRow = parentRow.previousElementSibling;
-                let upperCell = upperRow.children[count];
-                if (upperCell) {
-                    toDraw(upperCell);
-                    //upperCell.style.backgroundColor = '#000';
-                    activeCell = upperCell;
-                }
-        }
-        else if ((angle - rightWheelAngle) <= -5) {
-            let lowerRow = activeCell.parentElement.nextElementSibling;
-                let lowerCell = lowerRow.children[Array.from(activeCell.parentElement.children).indexOf(activeCell)];
-                if (lowerCell) {
-                    toDraw(lowerCell);
-                    //lowerCell.style.backgroundColor = '#000';
-                    activeCell = lowerCell;
-                }
-        }
+        //     let parentRow = activeCell.parentElement;
+        //         let count = Array.from(parentRow.children).indexOf(activeCell);
+        //         let upperRow = parentRow.previousElementSibling;
+        //         let upperCell = upperRow.children[count];
+        //         if (upperCell) {
+        //             toDraw(upperCell);
+        //             //upperCell.style.backgroundColor = '#000';
+        //             activeCell = upperCell;
+        //         }
+        // }
+        // else if ((angle - rightWheelAngle) <= -5) {
+        //     let lowerRow = activeCell.parentElement.nextElementSibling;
+        //         let lowerCell = lowerRow.children[Array.from(activeCell.parentElement.children).indexOf(activeCell)];
+        //         if (lowerCell) {
+        //             toDraw(lowerCell);
+        //             //lowerCell.style.backgroundColor = '#000';
+        //             activeCell = lowerCell;
+        //         }
+        // }
     }
 
     function toDraw(cell) {
+        console.log('cell:', cell);
         if (blackButton.classList.contains('active')){
+            console.log('сейчас закрашу ячейку');
             cell.style.backgroundColor = '#000';
         }
         else if (colorButton.classList.contains('active')) {
@@ -603,16 +623,20 @@ function toStartWheelsMode() {
         }
     }
 
-    document.addEventListener('keydown', event => {
+    function listenKeys(event) {
         //activeCell.style.backgroundColor = '#000';
         switch (event.code) {
             case 'KeyA':
                 leftWheelAngle -= 10;
                 rotateLeftWheel(leftWheelAngle);
                 let leftCell = activeCell.previousElementSibling;
+                console.log('activeCell после нажатия клавищи A:', activeCell);
+                console.log('activeCell.previousElementSibling:', activeCell.previousElementSibling);
+                console.log('leftCell:', leftCell);
                 if (leftCell) {
                     toDraw(leftCell);
                     //leftCell.style.backgroundColor = '#000';
+                    //console.log('leftCell.style.backgroundColor:', leftCell.style.backgroundColor);
                     activeCell = leftCell;
                 }
                 break;
@@ -657,7 +681,11 @@ function toStartWheelsMode() {
                 break;
             
         }
-    });
+
+        //wheelsButton.addEventListener('click', document.removeEventListener('keydown', listenKeys), {once:true});
+    }
+
+    document.addEventListener('keydown', listenKeys);
 
 
     let isMouseDown = false;
@@ -703,9 +731,9 @@ function toStartWheelsMode() {
       }
       
       function getAngle(element) {
-        console.log('element:', element);
+        //console.log('element:', element);
         let transform = getComputedStyle(element).getPropertyValue('transform');
-        console.log('transform:', transform);
+       // console.log('transform:', transform);
         let matrix = transform.match(/^matrix\((.+)\)$/)[1].split(',').map(parseFloat);
         return Math.round(Math.atan2(matrix[1], matrix[0]) * (180/Math.PI));
       }
