@@ -11,7 +11,7 @@ let helpButton = document.querySelector('.button__help');
 let displayHelp = document.querySelector('.display__help');
 
 helpButton.addEventListener('click', event => {
-    console.log('Help displayed');
+    
     if (helpButton.classList.contains('active')) {
         displayHelp.style.display = 'none';
         helpButton.classList.remove('active');
@@ -62,16 +62,13 @@ function makeGrid() {
         }
     }
 
-    //makeHover();
-    //listenHoverButton();
-    //listenWheelsButton();
-    
+       
 }
 
 makeGrid();
 
 
-// to make slider change of grid
+// to make slider changing the size of grid
 
 
 function sizeChange() {
@@ -91,6 +88,8 @@ function sizeChange() {
         eraseSlider.value = 0;
     }
 
+    // to restart grid and drawing after resize of grid
+
     clearGrid();
     makeGrid();
     listenHoverButton();
@@ -109,16 +108,11 @@ function makeHover() {
     // func to have possibility to remove drawings if eraseSlider.value is > 0;
     // contains condition for choosing color 
 
-    // let countDraw = 0;
+    
     function draw(element) {
         element.preventDefault();
         
-        // countDraw++;
-        // console.log('draw: что такое this:', this);
-        // console.log('draw: что такое element:', element);
-        // console.log('draw: что такое event:', event);
-        // console.log('сработала func draw раз:', countDraw);
-
+        
         if (hoverButton.classList.contains('active')) {
 
             if (blackButton.classList.contains('active')){
@@ -162,14 +156,11 @@ function makeHover() {
 
     // func to erase display element
 
-    //let countErase = 0;
-
+    
     function erase(element) {
         element.preventDefault();
         
-        // countErase++;
-        // console.log('функция erase сработала раз:', countErase);
-
+        
         if (hoverButton.classList.contains('active') && element.button === 2) {
                 this.style.backgroundColor = ``;
         }
@@ -181,9 +172,7 @@ function makeHover() {
         
         e.preventDefault();
         countStartDrawing++;
-        // console.log('e.target внутри starDrawing:', e.target);
-        // console.log('e.which внутри starDrawing:', e.which);
-        // console.log('starDrawing сработала раз:', countStartDrawing);
+      
             if (eraseSlider.value == 0 && e.which === 1) {
                 displayElement.forEach(element => element.addEventListener('pointerdown', draw));
                 displayElement.forEach(element => element.addEventListener('pointerenter', draw));
@@ -202,8 +191,7 @@ function makeHover() {
     //crazy fix for drawing by the first click 
 
     display.addEventListener('pointerdown', event => {
-        //console.log('event внутри pointerdown', event.target.closest('.display__element'));
-
+        
         let eventTarget = event.target.closest('.display__element');
         if (eventTarget && event.which === 1 && eraseSlider.value == 0) {
 
@@ -253,15 +241,13 @@ function makeHover() {
 
     display.addEventListener('pointerup', () => {
 
-        //console.log('сработал обработчик pointerup');
-
         displayElement.forEach(element => element.removeEventListener('pointerenter', draw));
         
         display.addEventListener('pointerdown', startDrawing);
     });
 
     display.addEventListener('pointerleave', () => {
-        //console.log('сработал обработчик pointerleave');
+        
         displayElement.forEach(element => element.removeEventListener('pointerenter', draw));
     });
 }
@@ -461,6 +447,7 @@ listenHoverButton();
 listenWheelsButton();
 
 // hard mode to draw by wheels
+
 let firstStart = 0;
 
 let startCell;
@@ -473,8 +460,7 @@ function listenWheelsButton() {
     toDetermineStartCell();
     toStartWheelsMode();  
 
-    console.log('Запущена listenWheelsButton')
-    
+       
 }
 
     wheelsButton.addEventListener('click', function () {
@@ -484,11 +470,7 @@ function listenWheelsButton() {
         if (wheelsButton.classList.contains('active')) {
             firstStart += 1;
             
-            
-
-            console.log('Сработал обработчик событий по клику!');
-            console.log('firstStart:', firstStart);
-
+           
             toDetermineStartCell();
             toStartWheelsMode(); 
             
@@ -506,13 +488,12 @@ function listenWheelsButton() {
 function toDetermineStartCell() {
     if (firstStart === 1) {
         startCell = display.querySelector(`.cell__${Math.floor(Math.random() * countGrids)}`);
-        console.log('startCell:', startCell);
-
+       
         activeCell = startCell;
-        console.log('activeCell:', activeCell);
+      
     }
     else {
-        console.log('activeCell != startCell:', activeCell);
+        
         activeCell = display.querySelector(`.${activeCell.classList[1]}`);
         document.removeEventListener('keydown', listenKeys);
     }
@@ -528,67 +509,69 @@ function toStartWheelsMode() {
     let leftWheelAngle = 0;
     let rightWheelAngle = 0;
 
-    //document.removeEventListener('keydown', listenKeys);
-
-    function rotateLeftWheel(angle) {
+    function rotateLeftWheel(angle, deltaX) {
         leftWheel.style.transform = `rotate(${angle}deg)`;
-        //console.log('angle:', angle);
-        //console.log('angle - leftWheelAngle:', angle - leftWheelAngle);
-        // if ((angle - leftWheelAngle) >= 5) {
+ 
+        if (deltaX >= 5) {
             
-        //     let rightCell = activeCell.nextElementSibling;
-        //         if (rightCell) {
-        //             toDraw(rightCell);
-        //             //rightCell.style.backgroundColor = '#000';
-        //             activeCell = rightCell;
-        //             // angle = 0;
-        //             // leftWheelAngle = 0;
-        //         }
-        // }
-        // else if ((angle - leftWheelAngle) <= -5) {
-        //     let leftCell = activeCell.previousElementSibling;
-        //         if (leftCell) {
-        //             toDraw(leftCell);
-        //             //leftCell.style.backgroundColor = '#000';
-        //             activeCell = leftCell;
-        //             // angle = 0;
-        //             // leftWheelAngle = 0;
-        //         }
-        // }
+            let rightCell = activeCell.nextElementSibling;
+                if (rightCell) {
+                    toDraw(rightCell);
+                    
+                    activeCell = rightCell;
+                   
+                }
+
+        }
+        else if (deltaX <= -5) {
+            let leftCell = activeCell.previousElementSibling;
+                if (leftCell) {
+                    toDraw(leftCell);
+                    
+                    activeCell = leftCell;
+                    
+                }
+                
+            
+        }
         
-        //console.log('leftWheelAngle:', angle);
+        
     }
 
-    function rotateRightWheel(angle) {
+    function rotateRightWheel(angle, deltaY) {
         rightWheel.style.transform = `rotate(${angle}deg)`;
-        //console.log('rightWheelAngle:', angle);
-        // if ((angle - rightWheelAngle) >= 5) {
+       
+        if (deltaY >= 5) {
             
-        //     let parentRow = activeCell.parentElement;
-        //         let count = Array.from(parentRow.children).indexOf(activeCell);
-        //         let upperRow = parentRow.previousElementSibling;
-        //         let upperCell = upperRow.children[count];
-        //         if (upperCell) {
-        //             toDraw(upperCell);
-        //             //upperCell.style.backgroundColor = '#000';
-        //             activeCell = upperCell;
-        //         }
-        // }
-        // else if ((angle - rightWheelAngle) <= -5) {
-        //     let lowerRow = activeCell.parentElement.nextElementSibling;
-        //         let lowerCell = lowerRow.children[Array.from(activeCell.parentElement.children).indexOf(activeCell)];
-        //         if (lowerCell) {
-        //             toDraw(lowerCell);
-        //             //lowerCell.style.backgroundColor = '#000';
-        //             activeCell = lowerCell;
-        //         }
-        // }
+            let parentRow = activeCell.parentElement;
+            
+                let count = Array.from(parentRow.children).indexOf(activeCell);
+                let upperRow = parentRow.previousElementSibling;
+                
+                let upperCell = upperRow.children[count];
+                if (upperCell) {
+                    toDraw(upperCell);
+                   
+                    activeCell = upperCell;
+                }
+        }
+        else if (deltaY <= -5) {
+
+            let lowerRow = activeCell.parentElement.nextElementSibling;
+            
+                let lowerCell = lowerRow.children[Array.from(activeCell.parentElement.children).indexOf(activeCell)];
+                if (lowerCell) {
+                    toDraw(lowerCell);
+                    
+                    activeCell = lowerCell;
+                }
+        }
     }
 
     function toDraw(cell) {
-        console.log('cell:', cell);
+        
         if (blackButton.classList.contains('active')){
-            console.log('сейчас закрашу ячейку');
+            
             cell.style.backgroundColor = '#000';
         }
         else if (colorButton.classList.contains('active')) {
@@ -624,19 +607,16 @@ function toStartWheelsMode() {
     }
 
     function listenKeys(event) {
-        //activeCell.style.backgroundColor = '#000';
+       
         switch (event.code) {
             case 'KeyA':
                 leftWheelAngle -= 10;
                 rotateLeftWheel(leftWheelAngle);
                 let leftCell = activeCell.previousElementSibling;
-                console.log('activeCell после нажатия клавищи A:', activeCell);
-                console.log('activeCell.previousElementSibling:', activeCell.previousElementSibling);
-                console.log('leftCell:', leftCell);
+                
                 if (leftCell) {
                     toDraw(leftCell);
-                    //leftCell.style.backgroundColor = '#000';
-                    //console.log('leftCell.style.backgroundColor:', leftCell.style.backgroundColor);
+                    
                     activeCell = leftCell;
                 }
                 break;
@@ -646,7 +626,7 @@ function toStartWheelsMode() {
                 let rightCell = activeCell.nextElementSibling;
                 if (rightCell) {
                     toDraw(rightCell);
-                    //rightCell.style.backgroundColor = '#000';
+                    
                     activeCell = rightCell;
                 }
                 break;
@@ -660,7 +640,7 @@ function toStartWheelsMode() {
                 let upperCell = upperRow.children[count];
                 if (upperCell) {
                     toDraw(upperCell);
-                    //upperCell.style.backgroundColor = '#000';
+                    
                     activeCell = upperCell;
                 }
                 break;
@@ -673,7 +653,7 @@ function toStartWheelsMode() {
                 let lowerCell = lowerRow.children[Array.from(activeCell.parentElement.children).indexOf(activeCell)];
                 if (lowerCell) {
                     toDraw(lowerCell);
-                    //lowerCell.style.backgroundColor = '#000';
+                    
                     activeCell = lowerCell;
                 }
                 break;
@@ -682,8 +662,11 @@ function toStartWheelsMode() {
             
         }
 
-        //wheelsButton.addEventListener('click', document.removeEventListener('keydown', listenKeys), {once:true});
+        
     }
+
+    // to move wheels by mouse
+
 
     document.addEventListener('keydown', listenKeys);
 
@@ -692,21 +675,14 @@ function toStartWheelsMode() {
     let lastMouseX = 0;
     let lastMouseY = 0;
 
-    // document.addEventListener('pointerdown', event => {
-    //     event.preventDefault();
-    //     if (event.button === 0) {
-    //         isMouseDown = true;
-    //         lastMouseX = event.clientX;
-    //         lastMouseY = event.clientY;
-    //     }
-    // });
+  
 
     leftWheel.addEventListener('mousedown', event => {
         event.preventDefault();
         if (event.button === 0) {
             isMouseDown = true;
             lastMouseX = event.clientX;
-            //lastMouseY = event.clientY;
+           
             leftWheelAngle = getAngle(leftWheel);
             document.addEventListener('mousemove', onMouseMoveLeftWheel);
             document.addEventListener('mouseup', onMouseUp);
@@ -716,10 +692,10 @@ function toStartWheelsMode() {
     function onMouseMoveLeftWheel(event) {
         if (isMouseDown) {
           let deltaX = event.clientX - lastMouseX;
-          let deltaY = event.clientY - lastMouseY;
+          
           let newAngle = leftWheelAngle + deltaX;
-          rotateLeftWheel(newAngle);
-          // do something with new angle to update active cell
+          rotateLeftWheel(newAngle, deltaX);
+          
         }
       }
       
@@ -731,9 +707,9 @@ function toStartWheelsMode() {
       }
       
       function getAngle(element) {
-        //console.log('element:', element);
+        
         let transform = getComputedStyle(element).getPropertyValue('transform');
-       // console.log('transform:', transform);
+       
         let matrix = transform.match(/^matrix\((.+)\)$/)[1].split(',').map(parseFloat);
         return Math.round(Math.atan2(matrix[1], matrix[0]) * (180/Math.PI));
       }
@@ -743,7 +719,7 @@ function toStartWheelsMode() {
         event.preventDefault();
         if (event.button === 0) {
             isMouseDown = true;
-            //lastMouseX = event.clientX;
+            
             lastMouseY = event.clientY;
             rightWheelAngle = getAngle(rightWheel);
             document.addEventListener('mousemove', onMouseMoveRightWheel);
@@ -755,66 +731,10 @@ function toStartWheelsMode() {
         if (isMouseDown) {
           let deltaY = event.clientY - lastMouseY;
           let newAngle = rightWheelAngle + deltaY;
-          rotateRightWheel(newAngle);
-          // do something with new angle to update active cell
+          rotateRightWheel(newAngle, deltaY);
+          
         }
       }
       
-    //   function onMouseUp(event) {
-    //     isMouseDown = false;
-    //     document.removeEventListener('mousemove', onMouseMove);
-    //     document.removeEventListener('mouseup', onMouseUp);
-    //   }
-      
-    //   function getAngle(element) {
-    //     console.log('element:', element);
-    //     let transform = getComputedStyle(element).getPropertyValue('transform');
-    //     console.log('transform:', transform);
-    //     let matrix = transform.match(/^matrix\((.+)\)$/)[1].split(',').map(parseFloat);
-    //     return Math.round(Math.atan2(matrix[1], matrix[0]) * (180/Math.PI));
-    //   }
-
-
-    // rightWheel.addEventListener('pointerdown', event => {
-    //     event.preventDefault();
-    //     if (event.button === 0) {
-    //         isMouseDown = true;
-    //         lastMouseX = event.clientX;
-    //         lastMouseY = event.clientY;
-    //     }
-    // });
-
-    // document.addEventListener('pointerup', event => {
-    //     if (event.button === 0) {
-    //         isMouseDown = false;
-    //     }
-    // });
-
-    // leftWheel.addEventListener('pointermove', event => {
-    //     event.preventDefault();
-    //     if(isMouseDown) {
-    //         let deltaX = event.clientX - lastMouseX;
-            
-    //         leftWheelAngle += deltaX;
-         
-    //         rotateLeftWheel(leftWheelAngle);
-       
-    //         lastMouseX = event.clientX;
-       
-    //     }
-    // });
-
-    // rightWheel.addEventListener('pointermove', event => {
-    //     event.preventDefault();
-    //     if(isMouseDown) {
-    //         //let deltaX = event.clientX - lastMouseX;
-    //         let deltaY = event.clientY - lastMouseY;
-    //         //leftWheelAngle += deltaX;
-    //         rightWheelAngle += deltaY;
-    //         //rotateLeftWheel(leftWheelAngle);
-    //         rotateRightWheel(rightWheelAngle);
-    //         //lastMouseX = event.clientX;
-    //         lastMouseY = event.clientY;
-    //     }
-    // });
+    
 }
